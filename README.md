@@ -46,7 +46,7 @@ and angle w.r.t x-axis. An example:
 import raytracying as rt
 
 rays = []
-rays.append([0, 0, -np.pi/6])
+rays.append([-10, 0, -np.pi/6])
 ```						 
 
 Once you configure your system with components and rays, you can propagate the 
