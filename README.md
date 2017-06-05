@@ -35,9 +35,9 @@ import raytracying as rt
 
 components = []
 components.append(rt.Lens(f=100,
-						  aperture=25.4,
-						  pos=[0,0],
-						  angle=0))
+			  aperture=25.4,
+			  pos=[0,0],
+			  angle=0))
 ```						  
 
 * **Rays**: A (python) list of 3-tuple of rays with x-coordinate, y-coordinate
@@ -52,7 +52,7 @@ rays.append([0, 0, -np.pi/6])
 Once you configure your system with components and rays, you can propagate the 
 rays using the following command:
 ```python
-rays_output = propagate_rays(components, rays)
+ray_bundles = propagate_rays(components, rays)
 
 ```
 
