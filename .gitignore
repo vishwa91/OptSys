@@ -1,6 +1,7 @@
 tests/
 __pycache__/
 modules/__pycache__/
+systems/
 
 *.pyc
 *.bmp

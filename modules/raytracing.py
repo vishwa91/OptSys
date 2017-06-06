@@ -282,18 +282,18 @@ class Grating(OpticalObject):
                 lmb: Angle after propagation
         '''
         # For now, order is assumed to be 1
-        m = 1
+        m = 1.0
 
         # Compute destination first
         dest = self.get_intersection(point[:2], point[2])
 
         # Next find output angle
-        incident_theta = point[2] - self.theta
+        incident_theta = point[2] + self.theta
 
         a = 1e-3/self.ngroves
         refracted_theta = np.arcsin(np.sin(incident_theta) - m*lmb/a)
 
-        return angle_wrap(refracted_theta + self.theta)
+        return angle_wrap(refracted_theta - self.theta)
 
 class Mirror(OpticalObject):
     ''' Class definition for Mirror object'''
