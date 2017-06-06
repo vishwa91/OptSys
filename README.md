@@ -84,6 +84,7 @@ See examples folder for more information.
 
 # Other modules
 **lf_2d.py** : Includes several functions for simulation of 2D lightfields
+
 **lf_4d.py**: Includes several functions for manipulating 4D lightfields
 
 # TODO
