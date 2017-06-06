@@ -248,7 +248,7 @@ class Lens(OpticalObject):
 
 class Grating(OpticalObject):
     ''' Class definition for a diffraction grating'''
-    def __init__(self, ngroves, aperture, pos, theta, transmissive=True):
+    def __init__(self, ngroves, aperture, pos, theta, m=1, transmissive=True):
         '''
             Constructor for Grating object.
 
@@ -257,6 +257,10 @@ class Grating(OpticalObject):
                 aperture: Size of diffraction grating
                 pos: Position of diffraction grating
                 theta: Inclination of theta w.r.t Y axis
+                m: Order of diffraction. If you want light to diffract on the 
+                   other side, use m=-1
+                transmissive: If True, diffraction grating is treated as being
+                    transmissive, else is treated as reflective
 
             Outputs:
                 None.
@@ -267,6 +271,7 @@ class Grating(OpticalObject):
 
         # Extra parameters
         self.ngroves = ngroves
+        self.m = m
         self.type = 'grating'
 
     def _get_angle(self, point, lmb):
@@ -281,9 +286,6 @@ class Grating(OpticalObject):
             Outputs:
                 lmb: Angle after propagation
         '''
-        # For now, order is assumed to be 1
-        m = 1.0
-
         # Compute destination first
         dest = self.get_intersection(point[:2], point[2])
 
@@ -291,7 +293,7 @@ class Grating(OpticalObject):
         incident_theta = point[2] + self.theta
 
         a = 1e-3/self.ngroves
-        refracted_theta = np.arcsin(np.sin(incident_theta) - m*lmb/a)
+        refracted_theta = np.arcsin(np.sin(incident_theta) - self.m*lmb/a)
 
         return angle_wrap(refracted_theta - self.theta)
 

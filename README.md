@@ -3,7 +3,7 @@ OptSys -- Optical systems simulator
 # About
 Simulate ray-tracing of optical system with first order approximation. This will
  be a handy tool to get an intial estimate for various components for your
- optical system. 
+ optical system.
 
 # Components
 The following components can be used:
@@ -11,10 +11,10 @@ The following components can be used:
 * **Lens**: Convex/concave lens with finite aperture. Uses lens maker's formula for
 computing output ray
 
-* **Mirror**: Flat mirror with finite aperture. 
+* **Mirror**: Flat mirror with finite aperture.
 
-* **Grating**: Diffraction grating with set number of groves and finite aperture. 
-As of now, only the first order can be simulated
+* **Grating**: Diffraction grating with set number of groves and finite aperture.
+As of now, only fixed order is supported.
 
 * **DMD**: Digital Micromirror device with zero pitch size and finite aperture.
 
@@ -37,8 +37,8 @@ components = []
 components.append(rt.Lens(f=100,
 			  aperture=25.4,
 			  pos=[0,0],
-			  angle=0))
-```	
+			  theta=0))
+```
 
 * **Rays**: A (python) list of 3-tuple of rays with x-coordinate, y-coordinate
 and angle w.r.t x-axis. An example:
@@ -49,7 +49,7 @@ rays = []
 rays.append([-10, 0, -np.pi/6])
 ```						 
 
-Once you configure your system with components and rays, you can propagate the 
+Once you configure your system with components and rays, you can propagate the
 rays using the following command:
 ```python
 ray_bundles = propagate_rays(components, rays)
@@ -57,7 +57,7 @@ ray_bundles = propagate_rays(components, rays)
 ```
 
 In order to view the output, you create a canvas and draw the components and
-rays. 
+rays.
 ```python
 import visualize as vis
 
@@ -82,13 +82,17 @@ canvas.save('example.png')
 
 See examples folder for more information.
 
+# Other modules
+**lf_2d.py** : Includes several functions for simulation of 2D lightfields
+**lf_4d.py**: Includes several functions for manipulating 4D lightfields
+
 # TODO
 1. Implement convex/concave mirror
-2. Implement vignetting computation 
+2. Implement vignetting computation
 3. Implement image plane computation
+4. Implement field lens optimization
 
 Authors:
 *	Vishwanath Saragadam (PhD candidate, ECE, Carnegie Mellon University)
 
-*	Aswin Sankaranarayanan (Asst. Prof., ECe, Carnegie Mellon University)
-	
+*	Aswin Sankaranarayanan (Asst. Prof., ECE, Carnegie Mellon University)
