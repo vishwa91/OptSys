@@ -97,12 +97,12 @@ class Canvas(object):
         '''
             Function to draw rays
         '''
+        if colors is None:
+            colors = [np.random.rand(3,1) for i in range(len(ray_bundles))]
+
         # Make sure number of rays and number of colors are same
         if len(ray_bundles) != len(colors):
             raise ValueError("Need same number of colors as rays")
-
-        if colors is None:
-            colors = [np.random.rand(3,1) for i in range(len(ray_bundles))]
 
         for r_idx, ray_bundle in enumerate(ray_bundles):
             # First N-1 points are easy to cover

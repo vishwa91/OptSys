@@ -6,3 +6,6 @@ modules/__pycache__/
 *.bmp
 *.png
 
+*.swp
+*.swo
+*~

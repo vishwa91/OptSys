@@ -31,19 +31,19 @@ Broadly, simulation consists of two parts
 * **Components**: A (python) list of various optical components with component
 specific paramenter, position, aperture and angle w.r.t y-axis. An example:
 ```python
-import raytracying as rt
+import raytracing as rt
 
 components = []
 components.append(rt.Lens(f=100,
 			  aperture=25.4,
 			  pos=[0,0],
 			  angle=0))
-```						  
+```	
 
 * **Rays**: A (python) list of 3-tuple of rays with x-coordinate, y-coordinate
 and angle w.r.t x-axis. An example:
 ```python
-import raytracying as rt
+import raytracing as rt
 
 rays = []
 rays.append([-10, 0, -np.pi/6])
@@ -88,6 +88,7 @@ See examples folder for more information.
 3. Implement image plane computation
 
 Authors:
-	Vishwanath Saragadam (PhD candidate, ECE, Carnegie Mellon University)
-	Aswin Sankaranarayanan (Asst. Prof., ECe, Carnegie Mellon University)
+*	Vishwanath Saragadam (PhD candidate, ECE, Carnegie Mellon University)
+
+*	Aswin Sankaranarayanan (Asst. Prof., ECe, Carnegie Mellon University)
 	
