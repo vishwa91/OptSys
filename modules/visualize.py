@@ -83,11 +83,14 @@ class Canvas(object):
                 grating_img.set_alpha(0.2)
             elif component.type == 'dmd':
                 # Draw a sawtooth rectangle
-                xy = [component.pos[0], component.pos[1]-component.aperture/2]
-                dmd_img = patches.FancyBboxPatch(xy=xy,
-                                                 width=component.aperture*0.1,
-                                                 height=component.aperture,
-                                                 boxstyle='Sawtooth')
+                xy = component.Hinv.dot(np.array([0, -component.aperture/2, 1]))
+                dmd_img = patches.Rectangle(xy=xy,
+                                            width=component.aperture*0.1,
+                                            height=component.aperture,
+                                            angle=-component.theta*180/np.pi,
+                                            linestyle='--',
+                                            hatch='x',
+                                            color='g')
                 self.axes.add_artist(dmd_img)
                 dmd_img.set_alpha(1)
             else:
