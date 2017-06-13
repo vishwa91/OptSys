@@ -69,3 +69,18 @@ def ray_fan(pos, theta_lim, nrays):
         rays.append([pos[0], pos[1], angle])
 
     return rays
+
+def throughput(ray_bundles):
+    '''
+        Compute throughput of a system based on number of rays passing through
+
+        Inputs:
+            ray_bundles: List of rays. See raytracing.propagate_rays()
+
+        Output:
+            thp: Total fraction of light energy that goes through the system
+    '''
+    nrays = len(ray_bundles)
+    propagated = [~np.isnan(ray_bundles[idx][-1, -1]) for idx in range(nrays)]
+
+    return sum(propagated)/(1.0*nrays)
