@@ -23,7 +23,9 @@ Apart from placement and viewing of optical elements and rays, you can also:
 
 1. Compute the light throughput of the system
 
-2. Simulate system for different wavelengths
+2. Compute vingetting for the scene for a given system
+
+3. Simulate system for different wavelengths
 
 # Usage
 Broadly, simulation consists of two parts
@@ -89,9 +91,8 @@ See examples folder for more information.
 
 # TODO
 1. Implement convex/concave mirror
-2. Implement vignetting computation
-3. Implement image plane computation
-4. Implement field lens optimization
+2. Implement image plane computation
+3. Implement field lens optimization
 
 Authors:
 *	Vishwanath Saragadam (PhD candidate, ECE, Carnegie Mellon University)

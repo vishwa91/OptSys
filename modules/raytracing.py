@@ -163,7 +163,7 @@ class OpticalObject(object):
         if np.isnan(dest[2]):
             return dest
 
-        dest[2] = self._get_angle(point, lmb)
+        dest[2] = self._get_angle(point, lmb, dest)
 
         return dest
 
@@ -218,7 +218,7 @@ class Lens(OpticalObject):
         self.f = f
         self.type = 'lens'
 
-    def _get_angle(self, point, lmb):
+    def _get_angle(self, point, lmb, dest):
         '''
             Angle after propagation. This function is used by propagate function
             of master class. Do not use it by itself.
@@ -226,13 +226,11 @@ class Lens(OpticalObject):
             Inputs:
                 point: 3-tuple point with x, y, angle
                 lmb: Wavelenght of ray. Only needed for grating
+                dest: 2D coordinate of interesection of ray with plane
 
             Outputs:
                 theta: Angle after propagation.
         '''
-        # Unfortunate overhead
-        dest = self.get_intersection(point[:2], point[2])
-
         # Find the point on focal plane where all parallel rays meet
         focal_dest = self.Hinv.dot(np.array([[self.f],
                                              [self.f*np.tan(point[2]+self.theta)],
@@ -274,7 +272,7 @@ class Grating(OpticalObject):
         self.m = m
         self.type = 'grating'
 
-    def _get_angle(self, point, lmb):
+    def _get_angle(self, point, lmb, dest):
         '''
             Function to compute angle after propagation. This is used by master
             class, do not use it by itself.
@@ -282,6 +280,7 @@ class Grating(OpticalObject):
             Inputs:
                 point: 3-tuple of x-coordinate, y-coordinate and angle (radian)
                 lmb: Wavelength of the ray.
+                dest: 2D coordinate of interesection of ray with plane
 
             Outputs:
                 lmb: Angle after propagation
@@ -318,7 +317,7 @@ class Mirror(OpticalObject):
         # Extra parameters
         self.type = 'mirror'
 
-    def _get_angle(self, point, lmb):
+    def _get_angle(self, point, lmb, dest):
         '''
             Function to compute angle after propagation through mirror.
 
@@ -358,7 +357,7 @@ class DMD(OpticalObject):
         self.deflection = deflection
         self.type = 'dmd'
 
-    def _get_angle(self, point, lmb=None):
+    def _get_angle(self, point, lmb=None, dest=None):
         '''
             Function to compute angle after propagation
 
@@ -392,7 +391,7 @@ class Aperture(OpticalObject):
         self.function = function
         self.type = 'aperture'
 
-    def __get_angle(self, point, lmb=None):
+    def __get_angle(self, point, lmb=None, dest=None):
         '''
             Function to compute output angle after propagation
 
