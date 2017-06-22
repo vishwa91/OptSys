@@ -44,7 +44,7 @@ def initial_rays(scene, objective, nrays=10):
         theta_max = np.arctan2(y2-scene[1, idx], x2-scene[0, idx])
 
         rays += ray_fan(scene[:, idx], [theta_min, theta_max], nrays)
-        colors += [np.random.rand(3, 1)]*nrays
+        colors += [tuple(np.random.rand(4))]*nrays
         point_ray_dict.append(range(idx*nrays, (idx+1)*nrays))
 
     return rays, point_ray_dict, colors

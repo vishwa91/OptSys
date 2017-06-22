@@ -16,7 +16,7 @@ if __name__ == '__main__':
     # Constants
     ffl = 45            # Flange focal length
     f_field = 40        # Focal length of field lens
-    aperture = 25.4     # Aperture of each lens.
+    aperture = 25.4     # Aperture of each lens
     nrays = 20          # Number of rays per scene point
     npoints = 5         # Number of scene points
     image_plane = -300  # Position of image plane
