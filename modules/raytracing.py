@@ -83,7 +83,7 @@ class OpticalObject(object):
               any object with this class. Look at the objects which inherit
               this class.
     '''
-    def __init__(self, aperture, pos, theta):
+    def __init__(self, aperture, pos, theta, name=None):
         '''
             Generic constructor for optical objects.
 
@@ -91,6 +91,8 @@ class OpticalObject(object):
                 aperture: Aperture size
                 pos: Position of lens in 2D cartesian grid
                 theta: Inclination of lens w.r.t Y axis
+                name: Name (string) of the optical component. Name will be
+                    used for labelling the ocmponents in drawing
 
             Outputs:
                 None.
@@ -98,6 +100,7 @@ class OpticalObject(object):
         self.theta = theta
         self.pos = pos
         self.aperture = aperture
+        self.name = name
 
         # Create coordinate transformation matrix
         self.H = self.create_xform()
@@ -196,9 +199,47 @@ class OpticalObject(object):
 
         return R.dot(T)
 
+class Sensor(OpticalObject):
+    ''' Class definition for a sensor object'''
+    def __init__(self, aperture, pos, theta, name='Sensor'):
+        '''
+            Constructor for sensor object. Sensor is simply a plan which blocks
+            all rays
+
+            Inputs:
+                aperture: Size of sensor
+                pos: Position of sensor in 2D cartesian grid
+                theta: Inclination of sensor w.r.t Y axis
+                name: Name of the optical component. If Empty string, generic
+                    name is assigned. If None, no name is printed.
+
+            Outputs:
+                None.
+        '''
+        # Initialize parent optical object parameters
+        OpticalObject.__init__(self, aperture, pos, theta, name)
+
+        # Extra parameters
+        self.type = 'sensor'
+
+    def _get_angle(self, point, lmb, dest):
+        '''
+            Angle after propagation. Since this is a sensor, return NaN to flag
+            end of ray
+
+            Inputs:
+                point: 3-tuple point with x, y, angle
+                lmb: Wavelength of ray. Only needed for grating
+                dest: 2D coordinate of interesection of ray with plane
+
+            Outputs:
+                theta: NaN, since this is a sensor
+        '''
+        return float('NaN')
+    
 class Lens(OpticalObject):
     ''' Class definition for lens object'''
-    def __init__(self, f, aperture, pos, theta):
+    def __init__(self, f, aperture, pos, theta, name=""):
         '''
             Constructor for lens object.
 
@@ -207,12 +248,17 @@ class Lens(OpticalObject):
                 aperture: Aperture size
                 pos: Position of lens in 2D cartesian grid
                 theta: Inclination of lens w.r.t Y axis
+                name: Name of the optical component. If Empty string, generic
+                    name is assigned. If None, no name is printed.
 
             Outputs:
                 None.
         '''
+        if name == "":
+            name = 'f = %d'%f
+            
         # Initialize parent optical object parameters
-        OpticalObject.__init__(self, aperture, pos, theta)
+        OpticalObject.__init__(self, aperture, pos, theta, name)
 
         # Extra parameters
         self.f = f
@@ -246,7 +292,8 @@ class Lens(OpticalObject):
 
 class Grating(OpticalObject):
     ''' Class definition for a diffraction grating'''
-    def __init__(self, ngroves, aperture, pos, theta, m=1, transmissive=True):
+    def __init__(self, ngroves, aperture, pos, theta, m=1, transmissive=True,
+                 name='Grating'):
         '''
             Constructor for Grating object.
 
@@ -259,6 +306,8 @@ class Grating(OpticalObject):
                    other side, use m=-1
                 transmissive: If True, diffraction grating is treated as being
                     transmissive, else is treated as reflective
+                name: Name of the optical component. If Empty string, generic
+                    name is assigned. If None, no name is printed.
 
             Outputs:
                 None.
@@ -298,7 +347,7 @@ class Grating(OpticalObject):
 
 class Mirror(OpticalObject):
     ''' Class definition for Mirror object'''
-    def __init__(self, aperture, pos, theta):
+    def __init__(self, aperture, pos, theta, name='Mirror'):
         '''
             Constructor for Mirror object.
 
@@ -306,13 +355,15 @@ class Mirror(OpticalObject):
                 aperture: Size of diffraction grating
                 pos: Position of diffraction grating
                 theta: Inclination of theta w.r.t Y axis
+                name: Name of the optical component. If Empty string, generic
+                    name is assigned. If None, no name is printed.
 
             Outputs:
                 None.
         '''
 
         # Initialize parent optical object parameters
-        OpticalObject.__init__(self, aperture, pos, theta)
+        OpticalObject.__init__(self, aperture, pos, theta, name)
 
         # Extra parameters
         self.type = 'mirror'
@@ -336,7 +387,7 @@ class Mirror(OpticalObject):
 
 class DMD(OpticalObject):
     ''' Class definition for DMD object'''
-    def __init__(self, deflection, aperture, pos, theta):
+    def __init__(self, deflection, aperture, pos, theta, name='DMD'):
         '''
             Constructor for DMD object.
 
@@ -345,13 +396,15 @@ class DMD(OpticalObject):
                 aperture: Size of diffraction grating
                 pos: Position of diffraction grating
                 theta: Inclination of theta w.r.t Y axis
+                name: Name of the optical component. If Empty string, generic
+                    name is assigned. If None, no name is printed.
 
             Outputs:
                 None.
         '''
 
         # Initialize parent optical object parameters
-        OpticalObject.__init__(self, aperture, pos, theta)
+        OpticalObject.__init__(self, aperture, pos, theta, name)
 
         # Extra parameters
         self.deflection = deflection

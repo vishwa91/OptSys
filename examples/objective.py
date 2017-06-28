@@ -24,7 +24,7 @@ if __name__ == '__main__':
                               theta=0))
 
     # Second lens creates the flange focal distance
-    components.append(rt.Lens(f=-13,
+    components.append(rt.Lens(f=13,
                               aperture=50,
                               pos=[20,0],
                               theta=0))

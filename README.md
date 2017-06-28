@@ -18,6 +18,8 @@ As of now, only fixed order is supported.
 
 * **DMD**: Digital Micromirror device with zero pitch size and finite aperture.
 
+* **Sensor**: Image sensor which halts all ray propagation. Use it as image plane.
+
 # Extra functions
 Apart from placement and viewing of optical elements and rays, you can also:
 

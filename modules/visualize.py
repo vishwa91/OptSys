@@ -12,19 +12,26 @@ class Canvas(object):
     '''
         Class definition for canvas to draw components and rays
     '''
-    def __init__(self, xlim, ylim):
+    def __init__(self, xlim, ylim, bbox=None, figsize=None):
         '''
             Function to initialize a blank canvas.
 
             Inputs:
                 xlim: Tuple with limits for x-axis
                 ylim: Tuple with limits for y-axis
+                bbox: Parameters for bounding box. If None, it is automatically
+                    assigned.
+                figsize: 2-tuple of figure size in inches. If None, figure size
+                    is set to 1ftx1ft
 
             Outputs:
                 None
         '''
         # Create an empty matplotlib tool
-        [self._canvas, self.axes] = plt.subplots()
+        if figsize is None:
+            figsize=(12, 12)
+
+        [self._canvas, self.axes] = plt.subplots(figsize=figsize)
 
         # Set x-coordinates and enable grid
         self.xlim = xlim
@@ -34,6 +41,11 @@ class Canvas(object):
         self.axes.set_xlim(xlim)
         self.axes.set_ylim(ylim)
         self.axes.grid(True)
+
+        if bbox is None:
+            bbox = bbox={'facecolor':'yellow', 'alpha':0.5}
+
+        self.bbox = bbox        
 
     def draw_components(self, components):
         '''
@@ -46,23 +58,29 @@ class Canvas(object):
                 None
         '''
         for component in components:
-            if component.type == 'lens':
+            # Precomputation
+            xy = component.Hinv.dot(np.array([0, -component.aperture/2, 1]))
+            if component.type == 'sensor':
+                # Draw a rectangle with pattern
+                dmd_img = patches.Rectangle(xy=xy,
+                                            width=component.aperture*0.1,
+                                            height=component.aperture,
+                                            angle=-component.theta*180/np.pi,
+                                            linestyle='--',
+                                            hatch='+',
+                                            color='c')
+                self.axes.add_artist(dmd_img)
+                dmd_img.set_alpha(1)
+            elif component.type == 'lens':
                 # Draw an elongated ellipse
-                xy = component.Hinv.dot(np.array([0, -component.aperture/2,1]))
                 lens_img = patches.Ellipse(xy=component.pos,
                                            width=component.aperture*0.1,
                                            height=component.aperture,
                                            angle=-component.theta*180/np.pi)
                 self.axes.add_artist(lens_img)
                 lens_img.set_alpha(0.5)
-                self.axes.text(xy[0],
-                               xy[1],
-                               'f = %s'%component.f,
-                               bbox={'facecolor':'yellow', 'alpha':0.5})
-
             elif component.type == 'mirror':
                 # Draw a rectangle
-                xy = component.Hinv.dot(np.array([0, -component.aperture/2, 1]))
                 mirror_img = patches.Rectangle(xy=xy[:2],
                                                width=component.aperture*0.05,
                                                height=component.aperture,
@@ -72,7 +90,6 @@ class Canvas(object):
                 mirror_img.set_alpha(1)
             elif component.type == 'grating':
                 # Draw a hatched rectangle
-                xy = component.Hinv.dot(np.array([0, -component.aperture/2, 1]))
                 grating_img = patches.Rectangle(xy=xy[:2],
                                                 width=component.aperture*0.05,
                                                 height=component.aperture,
@@ -83,7 +100,6 @@ class Canvas(object):
                 grating_img.set_alpha(0.2)
             elif component.type == 'dmd':
                 # Draw a sawtooth rectangle
-                xy = component.Hinv.dot(np.array([0, -component.aperture/2, 1]))
                 dmd_img = patches.Rectangle(xy=xy,
                                             width=component.aperture*0.1,
                                             height=component.aperture,
@@ -96,9 +112,22 @@ class Canvas(object):
             else:
                 raise ValueError("Invalid component name")
 
+            # Post addition
+            if component.name is not None:
+                xy = component.Hinv.dot(np.array([8, -component.aperture/2-8, 1]))
+                self.axes.text(xy[0],
+                               xy[1],
+                               component.name,
+                               bbox=self.bbox)
+
     def draw_rays(self, ray_bundles, colors=None):
         '''
-            Function to draw rays
+            Function to draw rays propagating through the system
+
+            Inputs:
+                ray_bundles: List of rays for the components
+                colors: Color for each ray. If None, colors are randomly
+                        generated
         '''
         if colors is None:
             colors = [np.random.rand(3,1) for i in range(len(ray_bundles))]
@@ -144,6 +173,7 @@ class Canvas(object):
                                 color=colors[r_idx],
                                 linewidth=1.0)
             self.axes.add_line(line)
+                
 
     def show(self):
         '''
@@ -155,4 +185,8 @@ class Canvas(object):
         '''
             Function to save the canvas
         '''
-        self._canvas.savefig(savename, bbox_inches='tight', dpi=300)
+        self._canvas.savefig(savename,
+                             bbox_inches='tight',
+                             dpi=600,
+                             frameon=False,
+                             papertype='a4')
