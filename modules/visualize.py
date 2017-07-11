@@ -28,10 +28,10 @@ class Canvas(object):
                 None
         '''
         # Create an empty matplotlib tool
-        if figsize is None:
-            figsize=(12, 12)
-
-        [self._canvas, self.axes] = plt.subplots(figsize=figsize)
+        if figsize is not None:
+            [self._canvas, self.axes] = plt.subplots(figsize=figsize)
+        else:
+            [self._canvas, self.axes] = plt.subplots()
 
         # Set x-coordinates and enable grid
         self.xlim = xlim
@@ -45,7 +45,7 @@ class Canvas(object):
         if bbox is None:
             bbox = bbox={'facecolor':'yellow', 'alpha':0.5}
 
-        self.bbox = bbox        
+        self.bbox = bbox
 
     def draw_components(self, components):
         '''
@@ -109,6 +109,15 @@ class Canvas(object):
                                             color='g')
                 self.axes.add_artist(dmd_img)
                 dmd_img.set_alpha(1)
+            elif component.type == 'aperture':
+                # Small rectangle
+                aperture_img = patches.Rectangle(xy=xy,
+                                                 width=component.aperture*0.02,
+                                                 height=component.aperture,
+                                                 angle=-component.theta*180/np.pi,
+                                                 color='b')
+                self.axes.add_artist(aperture_img)
+                aperture_img.set_alpha(0.5)
             else:
                 raise ValueError("Invalid component name")
 
@@ -187,6 +196,4 @@ class Canvas(object):
         '''
         self._canvas.savefig(savename,
                              bbox_inches='tight',
-                             dpi=600,
-                             frameon=False,
-                             papertype='a4')
+                             dpi=600)

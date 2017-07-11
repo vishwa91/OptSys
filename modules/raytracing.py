@@ -425,26 +425,24 @@ class DMD(OpticalObject):
 
 class Aperture(OpticalObject):
     ''' Class definition for aperture object'''
-    def __init__(self, function, aperture, pos, theta):
+    def __init__(self, aperture, pos, theta, name='Aperture'):
         '''
             Function to initialize the aperture object
 
             Inputs:
-                function: Aperture function discretized over the full aperture
-                          size. In the current framework, it has to be binary.
                 aperture: Size of the aperture
                 pos: Position of the aperture
                 theta: Clockwise rotation of aperture w.r.t y-axis in radians
+                name: Name of the Optical object. Default is 'Aperture'
         '''
 
         # Initialize parent optical object parameters
-        OpticalObject.__init__(self, aperture, pos, theta)
+        OpticalObject.__init__(self, aperture, pos, theta, name)
 
         # Extra parameters
-        self.function = function
         self.type = 'aperture'
 
-    def __get_angle(self, point, lmb=None, dest=None):
+    def _get_angle(self, point, lmb=None, dest=None):
         '''
             Function to compute output angle after propagation
 
@@ -455,5 +453,5 @@ class Aperture(OpticalObject):
             Outputs:
                 theta: Angle after propagation
         '''
-        # Unfortunate overhead
-        pass
+        # Simply return the angle
+        return point[2]
