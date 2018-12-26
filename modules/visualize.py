@@ -66,7 +66,7 @@ class Canvas(object):
                                             width=component.aperture*0.1,
                                             height=component.aperture,
                                             angle=-component.theta*180/np.pi,
-                                            linestyle='--',
+                                            linestyle='dashed',
                                             hatch='+',
                                             color='c')
                 self.axes.add_artist(dmd_img)
@@ -104,7 +104,7 @@ class Canvas(object):
                                             width=component.aperture*0.1,
                                             height=component.aperture,
                                             angle=-component.theta*180/np.pi,
-                                            linestyle='--',
+                                            linestyle='dashed',
                                             hatch='x',
                                             color='g')
                 self.axes.add_artist(dmd_img)

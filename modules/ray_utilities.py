@@ -28,7 +28,7 @@ def initial_rays(scene, objective, nrays=10):
     N = scene.shape[1]
     x0 = objective.pos[0]
     y0 = objective.pos[1]
-    r = objective.aperture/2
+    r = objective.aperture
     theta = np.pi/2-objective.theta
 
     # Compute extent of objective lens

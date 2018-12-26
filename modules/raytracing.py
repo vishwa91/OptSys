@@ -236,7 +236,7 @@ class Sensor(OpticalObject):
                 theta: NaN, since this is a sensor
         '''
         return float('NaN')
-    
+
 class Lens(OpticalObject):
     ''' Class definition for lens object'''
     def __init__(self, f, aperture, pos, theta, name=""):
@@ -256,7 +256,7 @@ class Lens(OpticalObject):
         '''
         if name == "":
             name = 'f = %d'%f
-            
+
         # Initialize parent optical object parameters
         OpticalObject.__init__(self, aperture, pos, theta, name)
 
@@ -302,7 +302,7 @@ class Grating(OpticalObject):
                 aperture: Size of diffraction grating
                 pos: Position of diffraction grating
                 theta: Inclination of theta w.r.t Y axis
-                m: Order of diffraction. If you want light to diffract on the 
+                m: Order of diffraction. If you want light to diffract on the
                    other side, use m=-1
                 transmissive: If True, diffraction grating is treated as being
                     transmissive, else is treated as reflective
