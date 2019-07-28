@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import patches
 from matplotlib import lines
+from matplotlib import cm
 
 import raytracing as rt
 
@@ -129,7 +130,8 @@ class Canvas(object):
                                component.name,
                                bbox=self.bbox)
 
-    def draw_rays(self, ray_bundles, colors=None):
+    def draw_rays(self, ray_bundles, colors=None, linewidth=0.5,
+                  membership=None):
         '''
             Function to draw rays propagating through the system
 
@@ -137,13 +139,25 @@ class Canvas(object):
                 ray_bundles: List of rays for the components
                 colors: Color for each ray. If None, colors are randomly
                         generated
+                linewidth: Width of each ray
+                membership: Indices array that indicate what all rays belong
+                    to a single spatial point.
         '''
         if colors is None:
             colors = [np.random.rand(3,1) for i in range(len(ray_bundles))]
 
+        if membership is None:
+            membership = [0 for i in range(len(ray_bundles))]
+
         # Make sure number of rays and number of colors are same
         if len(ray_bundles) != len(colors):
             raise ValueError("Need same number of colors as rays")
+
+        if len(ray_bundles) != len(colors):
+            raise ValueError("Need same number of members as rays")
+
+        # Create line styles
+        linestyles = ['-', '--', ':']
 
         for r_idx, ray_bundle in enumerate(ray_bundles):
             # First N-1 points are easy to cover
@@ -157,10 +171,12 @@ class Canvas(object):
                 ymin = ray_bundle[1, idx]
                 ymax = ray_bundle[1, idx+1]
 
+                linestyle = linestyles[membership[r_idx]%3]
                 line = lines.Line2D([xmin, xmax],
                                     [ymin, ymax],
                                     color=colors[r_idx],
-                                    linewidth=1.0)
+                                    linewidth=linewidth,
+                                    linestyle=linestyle)
                 self.axes.add_line(line)
 
             # The last point has slope and starting point, so extend it till
@@ -180,9 +196,9 @@ class Canvas(object):
             line = lines.Line2D([xmin, xmax],
                                 [ymin, ymax],
                                 color=colors[r_idx],
-                                linewidth=1.0)
+                                linewidth=linewidth,
+                                linestyle=linestyles[membership[r_idx]%3])
             self.axes.add_line(line)
-                
 
     def show(self):
         '''
@@ -197,3 +213,24 @@ class Canvas(object):
         self._canvas.savefig(savename,
                              bbox_inches='tight',
                              dpi=600)
+
+def get_colors(nwvl, nrays, cmap='jet'):
+    '''
+        Get a list of colors for visualization.
+
+        Inputs:
+            nwvl: Number of wavelengths (or type of rays)
+            nrays: Number of rays per wavelength (or for each type of rays)
+            cmap: Colormap to use. Default is Jet
+
+        Outputs:
+            colors_list: (Python) list with 3-tuple of colors
+    '''
+    colors = cm.get_cmap(cmap)(np.linspace(0, 1, nwvl))
+
+    colors_list = []
+
+    for idx in range(nwvl):
+        colors_list.append([colors[idx, :3] for idx2 in range(nrays)])
+
+    return colors_list
