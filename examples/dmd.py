@@ -11,7 +11,7 @@ import visualize as vis
 import ray_utilities
 
 if __name__ == '__main__':
-    # System to test a field lens
+    # System to test a DMD imager
 
     # Constants
     ffl = 45            # Flange focal length
@@ -23,12 +23,12 @@ if __name__ == '__main__':
     ymax = 50           # Limit of image plane
     ymin = -50
 
-    # Create a scene. Hehe
+    # Create a scene parallel to DMD and completely in focus.
     scene = np.zeros((2, npoints))
     scene[0, :] = image_plane
     scene[1, :] = np.linspace(ymin, ymax, npoints)
 
-    # Create an objective lens
+    # Create a simple objective lens
     components = []
     components.append(rt.Lens(f=-image_plane,
                               aperture=aperture,
@@ -39,7 +39,7 @@ if __name__ == '__main__':
                               pos=[0,0],
                               theta=0))
 
-    # Add a field lens
+    # Add a field lens to increase throughput
     components.append(rt.Lens(f=f_field,
                               aperture=aperture,
                               pos=[ffl,0],
@@ -55,7 +55,7 @@ if __name__ == '__main__':
                               pos=[ffl+110, 0],
                               theta=0))
 
-    # DMD field lens
+    # Add a field lens on DMD to increase throughput
     components.append(rt.Lens(f=100,
                               aperture=aperture,
                               pos=[ffl+210, 0],
@@ -87,10 +87,17 @@ if __name__ == '__main__':
     ray_bundles = rt.propagate_rays(components, rays)
 
     # Create a new canvas
-    canvas = vis.Canvas([image_plane, 300], [ymin, ymax])
+    canvas = vis.Canvas([image_plane, 300], [-100, ymax], figsize=[12, 6])
+
+    # Create unique colors for each point
+    colors = vis.get_colors(npoints, nrays)
+    colors_list = []
+
+    for color in colors:
+        colors_list += color
 
     # Draw the rays
-    canvas.draw_rays(ray_bundles, colors)
+    canvas.draw_rays(ray_bundles, colors_list, linewidth=0.2)
 
     # Draw the components
     canvas.draw_components(components)

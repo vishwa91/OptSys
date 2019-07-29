@@ -85,26 +85,26 @@ def throughput(ray_bundles):
 
     return sum(propagated)/(1.0*nrays)
 
-def vingetting(ray_bundles, ptdict):
+def vignetting(ray_bundles, ptdict):
     '''
-        Estimate vingetting by computing point wise throughput
+        Estimate vignetting by computing point wise throughput
 
         Inputs:
             ray_bundles: List of rays. See raytracing.propagate_rays()
             ptdict: List of indices of rays for each point
 
         Outputs:
-            ving: List of throughputs per point
+            vign: List of throughputs per point
     '''
     # Compute throughput
     nrays = len(ray_bundles)
     propagated = [~np.isnan(ray_bundles[idx][-1, -1]) for idx in range(nrays)]
     propagated = np.array(propagated)
 
-    ving = np.zeros(len(ptdict))
+    vign = np.zeros(len(ptdict))
 
     for idx in range(len(ptdict)):
         pt_indices = propagated[list(ptdict[idx])]
-        ving[idx] = sum(pt_indices)/len(pt_indices)
+        vign[idx] = sum(pt_indices)/len(pt_indices)
 
-    return ving
+    return vign

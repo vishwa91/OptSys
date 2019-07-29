@@ -214,7 +214,7 @@ class Canvas(object):
                              bbox_inches='tight',
                              dpi=600)
 
-def get_colors(nwvl, nrays, cmap='jet'):
+def get_colors(nwvl, nrays, cmap='jet', flatten=False):
     '''
         Get a list of colors for visualization.
 
@@ -222,6 +222,7 @@ def get_colors(nwvl, nrays, cmap='jet'):
             nwvl: Number of wavelengths (or type of rays)
             nrays: Number of rays per wavelength (or for each type of rays)
             cmap: Colormap to use. Default is Jet
+            flatten: If True, return a single list, else return a list of lists
 
         Outputs:
             colors_list: (Python) list with 3-tuple of colors
@@ -231,6 +232,9 @@ def get_colors(nwvl, nrays, cmap='jet'):
     colors_list = []
 
     for idx in range(nwvl):
-        colors_list.append([colors[idx, :3] for idx2 in range(nrays)])
+        if flatten:
+            colors_list += [colors[idx, :] for idx2 in range(nrays)]
+        else:
+            colors_list.append([colors[idx, :3] for idx2 in range(nrays)])
 
     return colors_list

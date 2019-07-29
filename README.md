@@ -51,7 +51,7 @@ import raytracing as rt
 
 rays = []
 rays.append([-10, 0, -np.pi/6])
-```						 
+```
 
 Once you configure your system with components and rays, you can propagate the
 rays using the following command:
@@ -92,9 +92,10 @@ See examples folder for more information.
 **lf_4d.py**: Includes several functions for manipulating 4D lightfields
 
 # TODO
-1. Implement convex/concave mirror
-2. Implement image plane computation
-3. Implement field lens optimization
+1. Redo all examples with updated functions
+2. Implement convex/concave mirror
+3. Implement image plane computation
+4. Implement field lens optimization
 
 Authors:
 *	Vishwanath Saragadam (PhD candidate, ECE, Carnegie Mellon University)
