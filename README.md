@@ -96,11 +96,11 @@ See examples folder for more information.
 # TODO
 - [ ] Redo all examples with updated functions
 - [x] Implement convex/concave mirror
+- [ ] Implement thin prism
 - [ ] Implement image plane computation
 - [ ] Implement field lens optimization
 - [ ] Replace numpy commands with pytorch to enable SGD-based optimization
 
 **Authors**:
 *	Vishwanath Saragadam (Postdoc, Rice University)
-
 *	Aswin Sankaranarayanan (Professor, ECE, Carnegie Mellon University)
