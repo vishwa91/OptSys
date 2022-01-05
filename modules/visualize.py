@@ -13,7 +13,7 @@ class Canvas(object):
     '''
         Class definition for canvas to draw components and rays
     '''
-    def __init__(self, xlim, ylim, bbox=None, figsize=None):
+    def __init__(self, xlim, ylim, bbox=None, figsize=None, dpi=100):
         '''
             Function to initialize a blank canvas.
 
@@ -24,6 +24,7 @@ class Canvas(object):
                     assigned.
                 figsize: 2-tuple of figure size in inches. If None, figure size
                     is set to 1ftx1ft
+                dpi: DPI resolution (default is 100)
 
             Outputs:
                 None
@@ -80,6 +81,15 @@ class Canvas(object):
                                            angle=-component.theta*180/np.pi)
                 self.axes.add_artist(lens_img)
                 lens_img.set_alpha(0.5)
+            elif component.type == 'spherical_mirror':
+                # Draw a rectangle
+                mirror_img = patches.Rectangle(xy=xy[:2],
+                                               width=component.aperture*0.05,
+                                               height=component.aperture,
+                                               angle=-component.theta*180/np.pi,
+                                               color='g')
+                self.axes.add_artist(mirror_img)
+                mirror_img.set_alpha(1)
             elif component.type == 'mirror':
                 # Draw a rectangle
                 mirror_img = patches.Rectangle(xy=xy[:2],

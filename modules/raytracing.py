@@ -136,7 +136,7 @@ class OpticalObject(object):
 
         # Sanity check to see if the interesection lies within the aperture
         if y_new_tf > self.aperture/2.0 or y_new_tf < -self.aperture/2.0:
-            flag = float('nan')
+           flag = float('nan')
         else:
             flag = 1.0
 
@@ -198,7 +198,6 @@ class OpticalObject(object):
         T[2, 2] = 1
 
         return R.dot(T)
-
 class Sensor(OpticalObject):
     ''' Class definition for a sensor object'''
     def __init__(self, aperture, pos, theta, name='Sensor'):
@@ -290,6 +289,60 @@ class Lens(OpticalObject):
 
         return theta
 
+class SphericalMirror(OpticalObject):
+    ''' Class definition for spherical mirror object'''
+    def __init__(self, f, aperture, pos, theta, name=""):
+        '''
+            Constructor for spherical mirror object.
+
+            Inputs:
+                f: Focal length of mirror -- positive for concave and negative 
+                    for convex
+                aperture: Aperture size
+                pos: Position of mirror in 2D cartesian grid
+                theta: Inclination of mirror w.r.t Y axis
+                name: Name of the optical component. If Empty string, generic
+                    name is assigned. If None, no name is printed.
+
+            Outputs:
+                None.
+        '''
+        if name == "":
+            name = 'f = %d'%f
+
+        # Initialize parent optical object parameters
+        OpticalObject.__init__(self, aperture, pos, theta, name)
+
+        # Extra parameters
+        self.f = f
+        self.type = 'spherical_mirror'
+
+    def _get_angle(self, point, lmb, dest):
+        '''
+            Angle after propagation. This function is used by propagate function
+            of master class. Do not use it by itself.
+
+            Inputs:
+                point: 3-tuple point with x, y, angle
+                lmb: Wavelenght of ray. Only needed for grating
+                dest: 2D coordinate of interesection of ray with plane
+
+            Outputs:
+                theta: Angle after propagation.
+        '''
+        # Find the point on focal plane where all parallel rays meet
+        focal_dest = self.Hinv.dot(np.array([[-self.f],
+                                             [self.f*np.tan(point[2]+self.theta)],
+                                             [1]]))
+        # Now find the angle
+        theta = np.arctan2(focal_dest[1]-dest[1], focal_dest[0]-dest[0])
+
+        # For convex lens, add 180 degrees
+        if self.f < 0:
+            theta += np.pi
+
+        return theta
+    
 class Grating(OpticalObject):
     ''' Class definition for a diffraction grating'''
     def __init__(self, ngroves, aperture, pos, theta, m=1, transmissive=True,

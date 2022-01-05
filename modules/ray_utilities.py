@@ -45,7 +45,7 @@ def initial_rays(scene, objective, nrays=10):
 
         rays += ray_fan(scene[:, idx], [theta_min, theta_max], nrays)
         colors += [tuple(np.random.rand(4))]*nrays
-        point_ray_dict.append(range(idx*nrays, (idx+1)*nrays))
+        point_ray_dict.append(np.arange(idx*nrays, (idx+1)*nrays))
 
     return rays, point_ray_dict, colors
 

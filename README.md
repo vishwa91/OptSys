@@ -11,6 +11,8 @@ The following components can be used:
 * **Lens**: Convex/concave lens with finite aperture. Uses lens maker's formula for
 computing output ray
 
+* **SphericalMirror**: Concave/convex mirror with finite aperture. Uses lens maker's formula for computing output ray
+
 * **Mirror**: Flat mirror with finite aperture.
 
 * **Grating**: Diffraction grating with set number of groves and finite aperture.
@@ -92,12 +94,13 @@ See examples folder for more information.
 **lf_4d.py**: Includes several functions for manipulating 4D lightfields
 
 # TODO
-1. Redo all examples with updated functions
-2. Implement convex/concave mirror
-3. Implement image plane computation
-4. Implement field lens optimization
+- [ ] Redo all examples with updated functions
+- [x] Implement convex/concave mirror
+- [ ] Implement image plane computation
+- [ ] Implement field lens optimization
+- [ ] Replace numpy commands with pytorch to enable SGD-based optimization
 
-Authors:
-*	Vishwanath Saragadam (PhD candidate, ECE, Carnegie Mellon University)
+**Authors**:
+*	Vishwanath Saragadam (Postdoc, Rice University)
 
-*	Aswin Sankaranarayanan (Asst. Prof., ECE, Carnegie Mellon University)
+*	Aswin Sankaranarayanan (Professor, ECE, Carnegie Mellon University)
